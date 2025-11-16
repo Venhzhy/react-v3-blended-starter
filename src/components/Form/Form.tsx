@@ -1,21 +1,28 @@
+import type { FormEvent } from "react";
+import styles from "./Form.module.css";
 import { FiSearch } from "react-icons/fi";
-import toast from "react-hot-toast";
 
-import style from "./Form.module.css";
+interface Props {
+  onSubmit: (query: string) => void;
+}
 
-export default function Form() {
+export default function Form({ onSubmit }: Props) {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const value = form.search.value.trim();
+    if (!value) return;
+    onSubmit(value);
+    form.reset();
+  };
+
   return (
-    <form className={style.form}>
-      <input
-        className={style.input}
-        placeholder="What do you want to write?"
-        name="search"
-        autoFocus
-      />
-
-      <button className={style.button} type="submit">
+    <form className={styles.form} onSubmit={handleSubmit}>
+      <input className={styles.input} name="search" placeholder="Search..." />
+      <button className={styles.button} type="submit">
         <FiSearch size="16px" />
       </button>
     </form>
   );
 }
+
